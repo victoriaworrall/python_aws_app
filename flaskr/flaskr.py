@@ -37,6 +37,24 @@ def add_entry():
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
 
+@app.route('/add_phrase', methods=['POST'])
+def add_phrase():
+    if not session.get('logged_in'):
+        abort(401)
+    db = get_db()
+    entered_phrase = request.form['text']
+    entered_phrase_length = get_phrase_length(entered_phrase)
+    db.execute('insert into phrases (text, length) values (?, ?)', [entered_phrase, entered_phrase_length])
+    db.commit()
+    flash('New phrase was pushed')
+    phrases = db.execute('select text from phrases')
+    return redirect(url_for('show_phrase_page'))
+
+@app.route('/phrase_page', methods=['GET'])
+def show_phrase_page():
+    db = get_db()
+    phrases = db.execute('select text, length from phrases order by length desc')
+    return render_template('enter_phrase.html', phrases=phrases) 
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -93,4 +111,8 @@ def initdb_command():
     """Initializes the database."""
     init_db()
     print 'Initialized the database.'
+
+
+def get_phrase_length(phrase):
+    return len(phrase)
 

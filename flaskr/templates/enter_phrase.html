@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+    <form action="{{ url_for('add_phrase') }}" method=post class=add-phrase>
+      <dl>
+        <dt>Enter a phrase here</dt>
+        <dd><textarea name=text rows=5 cols=40></textarea>
+        <dd><input type=submit value=Submit>
+      </dl>
+    </form>
+  {% endif %}
+  <ul>
+    <h2> Here are the other submitted phrases in descending order of length </h2>
+  {% for phrase in phrases %}
+    <li> \"{{ phrase.text }} \" has {{ phrase.length }} characters!</li>
+  {% endfor %}
+  </ul>
+{% endblock %}

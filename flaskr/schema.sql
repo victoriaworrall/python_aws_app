@@ -4,3 +4,9 @@ create table entries (
   title text not null,
   'text' text not null
 );
+
+drop table if exists phrases;
+create table phrases (
+  'text' text not null,
+   length integer not null
+);
